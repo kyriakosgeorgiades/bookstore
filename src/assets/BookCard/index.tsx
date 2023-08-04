@@ -60,6 +60,7 @@ const BookCard: React.FC<BookCardProps> = ({
     try {
       await saveBook(bookDto, setLoading);
       onBookSaved();
+      setEditedBook(newBook);
       showToast("Book Updated!", "success");
     } catch (error) {
       showToast("Failed to update the book.", "error");
