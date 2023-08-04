@@ -46,8 +46,6 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
     }));
   };
 
-
-
   const prepareLogin = () => {
     const _loginDto = new UserLoginRequestDto();
     _loginDto.userNameOrEmail = formData.email;
@@ -86,6 +84,16 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
   
   
     if (isLogin) {
+      try{
+        if (!formData.email.trim()) {
+          setEmailError('Email or username cannot be empty!');
+          return;
+        }
+  
+        if (!formData.password.trim()) {
+          setPasswordError('Password cannot be empty!');
+          return;
+        }
       const payload = prepareLogin();
       const response = await loginUser(payload, setLoading);
   
@@ -95,6 +103,10 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
         localStorage.setItem("token", response.data.jwt);
         showToast(`Welcome ${response.data.userName}`, "success");
         onClose();
+      }}catch (error){
+        setEmailError('Invalid credentials. Please check your email/username and password.');
+        setPasswordError('Invalid credentials. Please check your email/username and password.');
+        showToast("Failed to login. Please check your credentials and try again.", "error");
       }
     } else {
       if (formData.password !== formData.repeatPassword) {
@@ -186,6 +198,8 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
               name="email"
               value={formData.email}
               onChange={handleChange}
+              error={!!emailError}
+              helperText={emailError}
             />
             <TextField
               fullWidth
@@ -196,6 +210,8 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
               name="password"
               value={formData.password}
               onChange={handleChange}
+              error={!!passwordError}
+              helperText={passwordError}
             />
           </>
         )}
@@ -216,7 +232,11 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
             <Link
               component="button"
               variant="body2"
-              onClick={() => setIsLogin(false)}
+              onClick={() => {
+                setIsLogin(false);
+                setEmailError(null); // Reset email error
+                setPasswordError(null); // Reset password error
+              }}
             >
               Register here
             </Link>
@@ -227,7 +247,11 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
             <Link
               component="button"
               variant="body2"
-              onClick={() => setIsLogin(true)}
+              onClick={() => {
+                setIsLogin(true);
+                setEmailError(null); // Reset email error
+                setPasswordError(null); // Reset password error
+              }}
             >
               Login here
             </Link>

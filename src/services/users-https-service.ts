@@ -1,7 +1,7 @@
 import { UserLoginResponseDto } from "./../Dto/Users/Response/userLoginResponseDto";
 import { UserLoginRequestDto } from "../Dto/Users/Request/userLoginRequestDto";
 import { UserRegisterRequestDto } from "../Dto/Users/Request/userRegisterRequestDto";
-import { createAPI } from "./api";
+import { createAPI } from "./interceptor-http";
 import { ApiEndpoints } from "../endpoints/api-endpoints";
 import useApi from "./useApi";
 

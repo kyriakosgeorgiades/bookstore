@@ -1,7 +1,7 @@
 import { BookSaveRequestDto } from "../Dto/Books/Request/BookSaveRequestDto";
 import { BookResponseDto } from "../Dto/Books/Response/GetBookResponse";
 import { ApiEndpoints } from "../endpoints/api-endpoints";
-import { createAPI } from "./api";
+import { createAPI } from "./interceptor-http";
 
 export const getBooksSearch = (
   searchTerm: string | null,

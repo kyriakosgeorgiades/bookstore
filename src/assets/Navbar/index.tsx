@@ -104,8 +104,27 @@ const Navbar = () => {
   placeholder="Search by Book Name or Author"
   value={searchValue}
   onChange={handleSearchChange}
-  sx={{ mx: 60, flexGrow: 1 }} 
+  sx={{ 
+    mx: 60, 
+    flexGrow: 1,
+    '.MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'black',
+      },
+      '&:hover fieldset': {
+        borderColor: 'black',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: 'black',
+      },
+    },
+    '.MuiInputBase-input': {
+      color: 'black', 
+    },
+    backgroundColor: 'white',  
+  }}
 />
+
 
 <IconButton color="inherit" onClick={handleLoginRegisterClick}>
   <AccountCircle />
