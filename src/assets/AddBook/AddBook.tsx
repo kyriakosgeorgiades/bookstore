@@ -3,18 +3,22 @@ import { Fab } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import BookGrid from "../../assets/BookGrid/BookGrid";
 import Navbar from "../../assets/Navbar";
-import { getBooksSearch } from "../../services/books-https-service";
+import { getBooksSearch, saveBook } from "../../services/books-https-service";
 import { Book, BookResponseDto } from "../../Dto/Books/Response/GetBookResponse";
 import SaveBookDialog from "../Dialogs/SaveBookDialog/SaveBookDialog ";
+import LoadingContext from "../../Context/loadingContext";
+import { AuthorDto, BookSaveRequestDto } from "../../Dto/Books/Request/BookSaveRequestDto";
 
 
 interface AddBookProps {
   userLoggedIn: boolean;
+  onBookSaved: () => void;
 }
 
-const AddBook: React.FC<AddBookProps> = ({ userLoggedIn }) => {
+const AddBook: React.FC<AddBookProps> = ({ userLoggedIn, onBookSaved }) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const {isLoading, setLoading} = useContext(LoadingContext);
 
 
   const handleOpenAddDialog = () => {
@@ -25,15 +29,16 @@ const AddBook: React.FC<AddBookProps> = ({ userLoggedIn }) => {
     setIsAddDialogOpen(false);
   };
 
-  const handleSaveNewBook = (newBook: Book) => {
-    console.log("New book to save:", newBook);
+  const handleSaveNewBook = async (newBook: Book) => {
+
     setIsAddDialogOpen(false);
-  };
+};
+
 
   return (
     <div>
       <Navbar />
-      <BookGrid books={books} userLoggedIn={true} />
+      <BookGrid books={books} userLoggedIn={true} onBookSaved={onBookSaved} />
 
       {/* Floating "+" button */}
       {userLoggedIn && (
@@ -46,8 +51,6 @@ const AddBook: React.FC<AddBookProps> = ({ userLoggedIn }) => {
           <Add />
         </Fab>
       )}
-
-      {/* Add Book Dialog */}
       <SaveBookDialog
         open={isAddDialogOpen}
         book={null}

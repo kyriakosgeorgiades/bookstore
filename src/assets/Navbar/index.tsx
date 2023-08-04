@@ -48,7 +48,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     // Remove JWT from local storage
-    localStorage.removeItem("jwt");
+    localStorage.removeItem("token");
     setIsAuthenticated(false);
     setUser(undefined);
     handleCloseMenu();  // Close the user menu after logout

@@ -6,6 +6,7 @@ export const ApiEndpoints = {
   USER: {
     REGISTER: `${BASE_API_URL}/Users/Register`,
     LOGIN: `${BASE_API_URL}/Users/Login`,
+    VALIDATE_JWT: `${BASE_API_URL}/Users/ValidateToken`,
   },
   BOOKS: {
     GET_SEARCH: `${BASE_API_URL}/Books`,

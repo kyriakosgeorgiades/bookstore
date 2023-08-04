@@ -5,18 +5,27 @@ import { Edit, Delete } from '@mui/icons-material';
 import { AuthContext } from '../../Providers/AuthContext';
 import { Book } from '../../Dto/Books/Response/GetBookResponse';
 import EditBookDialog from '../Dialogs/SaveBookDialog/SaveBookDialog ';
+import { BookSaveRequestDto, AuthorDto } from '../../Dto/Books/Request/BookSaveRequestDto';
+import { deleteBook, saveBook } from '../../services/books-https-service';
+import LoadingContext from '../../Context/loadingContext';
+import { showToast } from '../../helpers/toastHelper';
+import SaveBookDialog from '../Dialogs/SaveBookDialog/SaveBookDialog ';
+import DeleteBookDialog from '../Dialogs/DeleteBookDialog/DeleteBookDialog ';
 
 
 
 interface BookCardProps {
   book: Book;
-  userLoggedIn: boolean; // this will be used to control the visibility of the icons
+  userLoggedIn: boolean;
+  onBookSaved: () => void;
 }
 
-const BookCard: React.FC<BookCardProps> = ({ book, userLoggedIn }) => {
+const BookCard: React.FC<BookCardProps> = ({ book, userLoggedIn, onBookSaved}) => {
   const auth = useContext(AuthContext);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editedBook, setEditedBook] = useState<Book | null>(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const {isLoading, setLoading} = useContext(LoadingContext)
 
   if (!auth) {
     throw new Error("useAuth must be used within an AuthProvider");
@@ -24,11 +33,33 @@ const BookCard: React.FC<BookCardProps> = ({ book, userLoggedIn }) => {
 
   const { isAuthenticated } = auth;
 
-  const handleSave = (book: Book) => {
-    // Here you can implement the logic to save the updated book
-    console.log(book);
+  const handleSave = async (newBook: Book) => {
+    const bookDto = new BookSaveRequestDto();
+    
+
+    bookDto.bookid = newBook.bookId;
+    bookDto.bookName = newBook.bookName;
+    bookDto.isbn = newBook.isbn;
+    bookDto.publicationYear = newBook.publicationYear;
+
+    bookDto.author = new AuthorDto();
+    bookDto.author.authorId = newBook.author.authorId;
+    bookDto.author.authorName = newBook.author.authorName; 
+    
+    await saveBook(bookDto, setLoading);
+    onBookSaved();
+    showToast("Book Saved!", "success");
     setIsEditOpen(false);
   }
+
+  const handleDeleteConfirm = async (bookId: string) => {
+    debugger
+    await deleteBook(bookId, setLoading); 
+    showToast("Book Deleted!", "success");
+    onBookSaved();
+    setIsDeleteOpen(false);
+  }
+  
 
   return (
     <Card sx={{ position: 'relative', width: 250 }}>
@@ -50,19 +81,28 @@ const BookCard: React.FC<BookCardProps> = ({ book, userLoggedIn }) => {
           <IconButton aria-label="edit" size="small" onClick={() => { setIsEditOpen(true); setEditedBook(book); }}>
             <Edit />
           </IconButton>
-          {/* For Delete button you can add similar logic */}
-          <IconButton aria-label="delete" size="small">
-            <Delete />
-          </IconButton>
+  
+          <IconButton aria-label="delete" size="small" onClick={() => setIsDeleteOpen(true)}>
+  <Delete />
+</IconButton>
+
         </Box>
       )}
 
-      <EditBookDialog 
+      <SaveBookDialog 
         open={isEditOpen} 
         onClose={() => setIsEditOpen(false)} 
         book={editedBook || book} 
         onSave={handleSave} 
       />
+
+<DeleteBookDialog 
+  bookName={book.bookName}
+  bookId={book.bookId}
+  open={isDeleteOpen}
+  onClose={() => setIsDeleteOpen(false)}
+  onConfirm={handleDeleteConfirm}
+/>
     </Card>
   );
 };
