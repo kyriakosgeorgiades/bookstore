@@ -12,6 +12,6 @@ export class Book {
 }
 
 export class Author {
-  authorId!: string;
+  authorId: string | undefined;
   authorName!: string;
 }
