@@ -1,7 +1,6 @@
 import axios from "axios";
 import { environment } from "../enviroment/enviorment";
 import { showToast } from "../helpers/toastHelper";
-import { SetStateAction } from "react";
 
 const BASE_API_URL = environment.apiUrl;
 type WhiteListedEndpoint = {
@@ -63,7 +62,7 @@ export const createAPI = (
 
       // Check if the error response is a 401 and handle it accordingly
       if (error.response && error.response.status === 401) {
-        localStorage.removeItem("jwtToken"); // Remove expired or invalid token
+        localStorage.removeItem("token"); // Remove expired or invalid token
 
         // Redirect to login or handle as necessary
         // For example, if you're using react-router you might do:
