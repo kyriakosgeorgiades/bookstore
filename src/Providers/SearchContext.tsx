@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useState } from 'react';
+import React, { createContext, ReactNode, useState } from "react";
 
 interface SearchContextType {
   searchValue: string;
@@ -8,7 +8,7 @@ interface SearchContextType {
 const SearchContext = createContext<SearchContextType | undefined>(undefined);
 
 const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [searchValue, setSearchValue] = useState<string>("");
 
   return (
     <SearchContext.Provider value={{ searchValue, setSearchValue }}>

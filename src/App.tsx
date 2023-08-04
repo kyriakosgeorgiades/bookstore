@@ -1,16 +1,15 @@
-import { ToastContainer } from 'react-toastify';
-import './App.css';
-import { AuthProvider } from './Providers/AuthContext';
+import { ToastContainer } from "react-toastify";
+import "./App.css";
+import { AuthProvider } from "./Providers/AuthContext";
 
-import LandingPage from './pages/LandingPage';
-import { useState } from 'react';
-import LoadingContext from './Context/loadingContext';
-import LoadingSpinner from './assets/LoadingSpinner/LoadingSpinner';
-import { SearchProvider } from './Providers/SearchContext';
+import LandingPage from "./pages/LandingPage";
+import { useState } from "react";
+import LoadingContext from "./Context/loadingContext";
+import LoadingSpinner from "./assets/LoadingSpinner/LoadingSpinner";
+import { SearchProvider } from "./Providers/SearchContext";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
-
 
   return (
     <div>

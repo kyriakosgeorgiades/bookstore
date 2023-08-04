@@ -60,20 +60,24 @@ export const createAPI = (
     (error) => {
       setLoading(false);
 
-      // Check if the error response is a 401 and handle it accordingly
       if (error.response && error.response.status === 401) {
-        localStorage.removeItem("token"); // Remove expired or invalid token
-
-        // Redirect to login or handle as necessary
-        // For example, if you're using react-router you might do:
-        // history.push('/login');
-
+        localStorage.removeItem("token");
         showToast("Session expired. Please login again.", "error");
       } else {
-        showToast(
-          error.response?.data?.message || "An unknown error occurred",
-          "error"
-        );
+        // Check if the error response has FluentValidation errors
+        if (error.response?.data?.errors) {
+          // Convert the structured errors into a flat list of error messages
+          const errorMessages = Object.values(error.response.data.errors)
+            .flat()
+            .join(', ');
+    
+          showToast(errorMessages, "error");
+        } else {
+          showToast(
+            error.response?.data?.message || "An unknown error occurred",
+            "error"
+          );
+        }
       }
 
       return Promise.reject(error);

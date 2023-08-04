@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const showToast = (
   message: string,
-  type: "info" | "success" | "warning" | "error" = "error"
+  type: "info" | "success" | "warning" | "error" = "error",
 ) => {
   toast[type](message, {
     position: "top-right",
