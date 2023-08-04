@@ -8,9 +8,14 @@ export const getBooksSearch = (
   setLoading: (value: boolean) => void
 ) => {
   const apiClient = createAPI(setLoading);
-  return apiClient.get<BookResponseDto>(
-    `${ApiEndpoints.BOOKS.GET_SEARCH}?searchTerm=${searchTerm}`
-  );
+  return apiClient
+    .get<BookResponseDto>(
+      `${ApiEndpoints.BOOKS.GET_SEARCH}?searchTerm=${searchTerm}`
+    )
+    .catch((error) => {
+      console.error("Get books error:", error);
+      throw error;
+    });
 };
 
 export const saveBook = async (
@@ -18,7 +23,10 @@ export const saveBook = async (
   setLoading: (value: boolean) => void
 ) => {
   const apiClient = createAPI(setLoading);
-  return await apiClient.post(`${ApiEndpoints.BOOKS.SAVE}`, book);
+  return apiClient.post(`${ApiEndpoints.BOOKS.SAVE}`, book).catch((error) => {
+    console.error("Save book error:", error);
+    throw error;
+  });
 };
 
 export const deleteBook = async (
@@ -26,5 +34,10 @@ export const deleteBook = async (
   setLoading: (value: boolean) => void
 ) => {
   const apiClient = createAPI(setLoading);
-  return await apiClient.delete(`${ApiEndpoints.BOOKS.DELETE(bookId)}`);
+  return apiClient
+    .delete(`${ApiEndpoints.BOOKS.DELETE(bookId)}`)
+    .catch((error) => {
+      console.error("Delete book error:", error);
+      throw error;
+    });
 };
