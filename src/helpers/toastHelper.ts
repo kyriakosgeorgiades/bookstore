@@ -7,7 +7,7 @@ export const showToast = (
   type: "info" | "success" | "warning" | "error" = "error"
 ) => {
   toast[type](message, {
-    position: "bottom-right",
+    position: "top-right",
     autoClose: 5000,
     hideProgressBar: false,
     closeOnClick: true,

@@ -39,7 +39,7 @@ export const createAPI = (
       );
 
       if (!isWhiteListed) {
-        const token = localStorage.getItem("jwtToken");
+        const token = localStorage.getItem("token");
         if (token) {
           config.headers["Authorization"] = `Bearer ${token}`;
         }
@@ -60,10 +60,23 @@ export const createAPI = (
     },
     (error) => {
       setLoading(false);
-      showToast(
-        error.response?.data?.message || "An unknown error occurred",
-        "error"
-      );
+
+      // Check if the error response is a 401 and handle it accordingly
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem("jwtToken"); // Remove expired or invalid token
+
+        // Redirect to login or handle as necessary
+        // For example, if you're using react-router you might do:
+        // history.push('/login');
+
+        showToast("Session expired. Please login again.", "error");
+      } else {
+        showToast(
+          error.response?.data?.message || "An unknown error occurred",
+          "error"
+        );
+      }
+
       return Promise.reject(error);
     }
   );

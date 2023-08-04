@@ -13,6 +13,7 @@ import { UserRegisterRequestDto } from '../../../Dto/Users/Request/userRegisterR
 import { showToast } from '../../../helpers/toastHelper';
 import { AuthContext } from '../../../Providers/AuthContext';
 import LoadingContext from '../../../Context/loadingContext';
+import { BookSaveRequestDto } from '../../../Dto/Books/Request/BookSaveRequestDto';
 
 const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -87,11 +88,12 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
     if (isLogin) {
       const payload = prepareLogin();
       const response = await loginUser(payload, setLoading);
-      debugger
+  
       if (response) {
         setIsAuthenticated(true);
         setUser(response.data);
-        showToast("Welcome User", "success");
+        localStorage.setItem("token", response.data.jwt);
+        showToast(`Welcome ${response.data.userName}`, "success");
         onClose();
       }
     } else {
@@ -112,7 +114,7 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
       }
       const payload = prepareRegister();
       const response = await registerUser(payload, setLoading);
-      debugger
+  
       if (response) {
         onClose();
         setIsLogin(true);  
@@ -121,8 +123,6 @@ const AuthDialog: React.FC<AuthDialogProps> = ({ open, onClose }) => {
     }
   };
   
-  
-
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>{isLogin ? 'Login' : 'Register'}</DialogTitle>
