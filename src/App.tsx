@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage';
 import { useState } from 'react';
 import LoadingContext from './Context/loadingContext';
 import LoadingSpinner from './assets/LoadingSpinner/LoadingSpinner';
+import { SearchProvider } from './Providers/SearchContext';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,14 +15,15 @@ const App = () => {
   return (
     <div>
       <LoadingContext.Provider value={{ isLoading, setLoading: setIsLoading }}>
-      {isLoading && <LoadingSpinner />}
-    <ToastContainer />
-    <AuthProvider>
-      <LandingPage />
-    </AuthProvider>
-    </LoadingContext.Provider>
+        {isLoading && <LoadingSpinner />}
+        <ToastContainer />
+        <AuthProvider>
+          <SearchProvider>
+            <LandingPage />
+          </SearchProvider>
+        </AuthProvider>
+      </LoadingContext.Provider>
     </div>
   );
 };
-
 export default App;

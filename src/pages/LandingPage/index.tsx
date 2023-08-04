@@ -11,12 +11,21 @@ import { Fab } from "@mui/material";
 import { AuthContext } from "../../Providers/AuthContext";
 import { BookSaveRequestDto, AuthorDto } from "../../Dto/Books/Request/BookSaveRequestDto";
 import { showToast } from "../../helpers/toastHelper";
+import { SearchContext } from "../../Providers/SearchContext";
 
 const LandingPage = () => {
     const [books, setBooks] = useState<Book[]>([]); // <-- State for books
     const { isLoading, setLoading } = useContext(LoadingContext);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
     const auth = useContext(AuthContext);
+
+    const searchContext = useContext(SearchContext);
+
+    if (!searchContext) {
+      throw new Error("SearchContext must be used within a SearchProvider");
+    }
+  
+    const { searchValue } = searchContext;
     if (!auth) {
        throw new Error("useAuth must be used within an AuthProvider");
      }
@@ -45,14 +54,14 @@ const LandingPage = () => {
       bookDto.author.authorName = newBook.author.authorName; 
       
       await saveBook(bookDto, setLoading);
-      fetchBooks()
+      fetchBooks('')
       showToast("Book Saved!", "success");
       setIsAddDialogOpen(false);
     };
 
-    const fetchBooks = async () => {
+    const fetchBooks = async (search: string) => {
       try {
-          const response = await getBooksSearch('',setLoading)
+          const response = await getBooksSearch(search,setLoading)
           if (response && response.data) {
 
               setBooks(response.data.books || []);
@@ -62,12 +71,19 @@ const LandingPage = () => {
           console.error("Failed to fetch books:", error);
       }
   };
-    useEffect(() => {
-        fetchBooks();
-    }, []); // Empty dependency array means this useEffect runs once when component mounts
-
+  useEffect(() => {
+    // This useEffect will run whenever `searchValue` changes
+    if (searchValue.trim()) {
+      // Call the API with the searchValue
+      // You can use the fetchBooks function and modify it to take searchValue as a parameter
+      fetchBooks(searchValue);
+    } else {
+      // If the searchValue is empty, fetch all books or handle accordingly
+      fetchBooks('');
+    }
+  }, [searchValue]);
     const handleBookSaved = () => {
-      fetchBooks(); // Refetch the books after a book is saved
+      fetchBooks(''); // Refetch the books after a book is saved
     };
     return (
         <div>
