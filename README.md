@@ -54,6 +54,8 @@ npm install
 npm start
 ```
 
+Side Note: If you change the port of the API please adapt the ```apiUrl``` in the ```enviroment/enviorment.ts```
+
 This will run the app in development mode. Open http://localhost:3000 in your browser to view it.
 
 ## Functionality
