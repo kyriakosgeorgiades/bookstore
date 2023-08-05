@@ -40,19 +40,22 @@ const AddBook: React.FC<AddBookProps> = ({ userLoggedIn, onBookSaved }) => {
   return (
     <div>
       <Navbar />
-      <BookGrid books={books} userLoggedIn={true} onBookSaved={onBookSaved} />
+      <div style={{ display: "flex", justifyContent: "space-between", flexDirection: "column", height: "100vh"}}>
+        <BookGrid books={books} userLoggedIn={true} onBookSaved={onBookSaved} />
 
-      {/* Floating "+" button */}
-      {userLoggedIn && (
-        <Fab
-          color="primary"
-          aria-label="add"
-          style={{ position: "fixed", bottom: 16, right: 16 }}
-          onClick={handleOpenAddDialog}
-        >
-          <Add />
-        </Fab>
-      )}
+        {/* Floating "+" button */}
+        {userLoggedIn && (
+          <div style={{ alignSelf: "flex-end", padding: 16 }}>
+            <Fab
+              color="primary"
+              aria-label="add"
+              onClick={handleOpenAddDialog}
+            >
+              <Add />
+            </Fab>
+          </div>
+        )}
+      </div>
       <SaveBookDialog
         open={isAddDialogOpen}
         book={null}

@@ -5,6 +5,9 @@ import {
   IconButton,
   Typography,
   TextField,
+  useTheme,
+  useMediaQuery,
+  Box,
 } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import AuthDialog from "../Dialogs/AuthDialog/AuthDialog";
@@ -33,6 +36,9 @@ const Navbar = () => {
 
   const { setIsAuthenticated, setUser } = auth;
   const { setSearchValue: updateSearchValue } = searchContext;
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
   const handleLoginRegisterClick = (event: React.MouseEvent<HTMLElement>) => {
     if (auth.isAuthenticated) {
@@ -95,46 +101,60 @@ const Navbar = () => {
   return (
     <>
       <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">Book Store</Typography>
+      <Toolbar>
+  <Typography variant="h6">Book Store</Typography>
 
-          <TextField
-            variant="outlined"
-            size="small"
-            placeholder="Search by Book Name or Author"
-            value={searchValue}
-            onChange={handleSearchChange}
-            sx={{
-              mx: 60,
-              flexGrow: 1,
-              ".MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "black",
-                },
-                "&:hover fieldset": {
-                  borderColor: "black",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "black",
-                },
-              },
-              ".MuiInputBase-input": {
-                color: "black",
-              },
-              backgroundColor: "white",
-            }}
-          />
+  {/* This Box will push the search bar towards the center */}
+  <Box flexGrow={1} />
 
-          <IconButton color="inherit" onClick={handleLoginRegisterClick}>
-            <AccountCircle />
-          </IconButton>
+  <Box 
+    width={isSmallScreen ? '100%' : 'auto'} 
+    maxWidth={isSmallScreen ? '100%' : '1200px'}
+    minWidth={isSmallScreen ? '100px': '360px'}
+    mx={isSmallScreen ? 2 : 10} 
+  >
+    <TextField
+      variant="outlined"
+      size="small"
+      placeholder="Search by Book Name or Author"
+      value={searchValue}
+      onChange={handleSearchChange}
+      sx={{
+        width: '100%',
+        ".MuiOutlinedInput-root": {
+          "& fieldset": {
+            borderColor: "black",
+          },
+          "&:hover fieldset": {
+            borderColor: "black",
+          },
+          "&.Mui-focused fieldset": {
+            borderColor: "black",
+          },
+        },
+        ".MuiInputBase-input": {
+          color: "black",
+        },
+        backgroundColor: "white",
+      }}
+    />
+  </Box>
 
-          <UserMenu
-            anchorEl={anchorEl}
-            onClose={handleCloseMenu}
-            onLogout={handleLogout}
-          />
-        </Toolbar>
+  {/* This Box will push the login icon to the right and the search bar towards the center */}
+  <Box flexGrow={1} />
+
+  <IconButton color="inherit" onClick={handleLoginRegisterClick}>
+    <AccountCircle />
+  </IconButton>
+
+  <UserMenu
+    anchorEl={anchorEl}
+    onClose={handleCloseMenu}
+    onLogout={handleLogout}
+  />
+</Toolbar>
+
+
       </AppBar>
       <AuthDialog open={open} onClose={handleClose} />
     </>
